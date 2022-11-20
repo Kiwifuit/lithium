@@ -20,6 +20,10 @@ impl Login {
     pub fn update_password(&mut self, password: String) {
         self.password = Some(password)
     }
+
+    pub fn get_username(&self) -> String {
+        self.username.to_owned()
+    }
 }
 
 pub fn query_all_usernames(conn: &Connection) -> Result<Vec<Login>, DatabaseError> {

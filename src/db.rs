@@ -67,7 +67,7 @@ pub fn query_password_for(conn: &Connection, login: &mut Login) -> Result<(), Da
     let mut query = match conn.prepare("SELECT password_value FROM logins WHERE username_value = ?")
     {
         Ok(q) => q,
-        Err(e) => return Err(DatabaseError::UsernameQueryPrepareError(e.to_string())),
+        Err(e) => return Err(DatabaseError::PasswordQueryPrepareError(e.to_string())),
     };
 
     match query.query([login.get_username()]) {

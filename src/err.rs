@@ -1,8 +1,8 @@
 use std::fmt::Display;
 
 pub enum DatabaseError {
-    UsernameQueryPrepareError,
     UnknownUsernameError,
+    UsernameQueryPrepareError(String),
     UsernameParseError(String),
     PasswordQueryPrepareError(String),
     PasswordParseError(String, String),
@@ -14,14 +14,16 @@ impl Display for DatabaseError {
             f,
             "{}",
             match self {
-                Self::UsernameParseError(err) =>
-                    format!("An error occurred while parsing the username: {}", err),
                 Self::UnknownUsernameError =>
                     String::from("An unknown error occurred while querying the database"),
-                Self::UsernameQueryPrepareError =>
-                    String::from("An unknown error occurred while preparing to query the database"),
+                Self::UsernameParseError(err) =>
+                    format!("An error occurred while parsing the username: {}", err),
+                Self::UsernameQueryPrepareError(err) => format!(
+                    "An error occurred while preparing to query the database (username): {}",
+                    err
+                ),
                 Self::PasswordQueryPrepareError(err) => format!(
-                    "An error occurred while preparing to query the database: {} (password)",
+                    "An error occurred while preparing to query the database (password): {}",
                     err
                 ),
                 Self::PasswordParseError(usr, err) => format!(

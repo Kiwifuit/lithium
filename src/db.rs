@@ -29,7 +29,7 @@ impl Login {
 pub fn query_all_usernames(conn: &Connection) -> Result<Vec<Login>, DatabaseError> {
     let mut query = match conn.prepare("SELECT username_value FROM logins") {
         Ok(q) => q,
-        Err(_) => return Err(DatabaseError::UsernameQueryPrepareError),
+        Err(e) => return Err(DatabaseError::UsernameQueryPrepareError(e.to_string())),
     };
 
     let res = query.query_map([], |row| {
@@ -67,7 +67,7 @@ pub fn query_password_for(conn: &Connection, login: &mut Login) -> Result<(), Da
     let mut query = match conn.prepare("SELECT password_value FROM logins WHERE username_value = ?")
     {
         Ok(q) => q,
-        Err(_) => return Err(DatabaseError::UsernameQueryPrepareError),
+        Err(e) => return Err(DatabaseError::UsernameQueryPrepareError(e.to_string())),
     };
 
     match query.query([login.get_username()]) {

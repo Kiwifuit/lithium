@@ -28,3 +28,24 @@ impl Display for DatabaseError {
         )
     }
 }
+
+#[derive(Debug)]
+pub enum PathError {
+    GlobError(String),
+    SearchError(String),
+}
+
+impl Display for PathError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::GlobError(err) =>
+                    format!("An error occurred while creating the globber: {}", err),
+                Self::SearchError(err) =>
+                    format!("An error occurred while searching for profiles: {}", err),
+            }
+        )
+    }
+}

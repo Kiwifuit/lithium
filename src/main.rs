@@ -1,5 +1,6 @@
 mod db;
 mod err;
+mod path;
 
 use rusqlite::Connection;
 

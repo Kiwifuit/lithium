@@ -62,3 +62,43 @@ pub fn query_all_usernames(conn: &Connection) -> Result<Vec<Login>, DatabaseErro
         return Err(DatabaseError::UnknownUsernameError);
     }
 }
+
+pub fn query_password_for(conn: &Connection, login: &mut Login) -> Result<(), DatabaseError> {
+    let mut query = match conn.prepare("SELECT password_value FROM logins WHERE username_value = ?")
+    {
+        Ok(q) => q,
+        Err(_) => return Err(DatabaseError::UsernameQueryPrepareError),
+    };
+
+    match query.query([login.get_username()]) {
+        Ok(mut passwd) => {
+            // Everything inside counts as a  "Password Parse Error"
+            // because making a separate variant is a pain and I don't
+            // wanna do that ;-;
+            let passwd = passwd.next();
+
+            // Apparently this worked first try :D
+            // .....hopefully
+            if let Ok(Some(passwd)) = passwd {
+                let passwd = match passwd.get(0) {
+                    Ok(p) => p,
+                    Err(e) => {
+                        return Err(DatabaseError::PasswordParseError(
+                            login.get_username(),
+                            e.to_string(),
+                        ))
+                    }
+                };
+                login.update_password(passwd)
+            }
+        }
+        Err(e) => {
+            return Err(DatabaseError::PasswordParseError(
+                login.get_username(),
+                e.to_string(),
+            ))
+        }
+    };
+
+    Ok(())
+}

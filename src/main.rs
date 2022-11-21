@@ -12,6 +12,6 @@ fn main() {
             continue;
         }
 
-        println!("Login {:?}", username);
+        println!("{:?}", username);
     }
 }

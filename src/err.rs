@@ -5,8 +5,7 @@ pub enum DatabaseError {
     UnknownUsernameError,
     UsernameQueryPrepareError(String),
     UsernameParseError(String),
-    PasswordQueryPrepareError(String),
-    PasswordParseError(String, String),
+    PasswordReadError(String),
 }
 
 impl Display for DatabaseError {
@@ -20,17 +19,11 @@ impl Display for DatabaseError {
                 Self::UsernameParseError(err) =>
                     format!("An error occurred while parsing the username: {}", err),
                 Self::UsernameQueryPrepareError(err) => format!(
-                    "An error occurred while preparing to query the database (username): {}",
+                    "An error occurred while preparing to query the database: {}",
                     err
                 ),
-                Self::PasswordQueryPrepareError(err) => format!(
-                    "An error occurred while preparing to query the database (password): {}",
-                    err
-                ),
-                Self::PasswordParseError(usr, err) => format!(
-                    "An error occurred while parsing the password for {:?}: {}",
-                    usr, err
-                ),
+                Self::PasswordReadError(err) =>
+                    format!("An error occurred while reading the password: {}", err),
             }
         )
     }

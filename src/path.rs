@@ -4,8 +4,8 @@ use std::env::var;
 use std::path::PathBuf;
 
 fn get_home() -> PathBuf {
-    let Ok(local_app_dir) = var("LOCALAPPDIR") else {
-        panic!("LOCALAPPDIR is not set, {}", if cfg!(target_os = "windows") {
+    let Ok(local_app_dir) = var("LOCALAPPDATA") else {
+        panic!("LOCALAPPDATA is not set, {}", if cfg!(target_os = "windows") {
             "are you sure this system is properly configured?"
         } else {
             "are you sure you're running on Windows?"

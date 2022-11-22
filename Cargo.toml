@@ -23,3 +23,4 @@ xz = {version = "0.1.0", optional = true}
 
 [features]
 package-data = ["dep:tar", "dep:xz"]
+discord-webhook = []

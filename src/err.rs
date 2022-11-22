@@ -6,6 +6,7 @@ pub enum DatabaseError {
     UsernameQueryPrepareError(String),
     UsernameParseError(String),
     PasswordReadError(String),
+    ConnectionError(String, String),
 }
 
 impl Display for DatabaseError {
@@ -24,6 +25,10 @@ impl Display for DatabaseError {
                 ),
                 Self::PasswordReadError(err) =>
                     format!("An error occurred while reading the password: {}", err),
+                Self::ConnectionError(prof, err) => format!(
+                    "An error occurred while connecting to the database on {:?}: {}",
+                    prof, err
+                ),
             }
         )
     }

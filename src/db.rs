@@ -1,7 +1,7 @@
-use std::process::exit;
+use std::{path::PathBuf, process::exit};
 
 use crate::err::DatabaseError;
-use rusqlite::{Connection, DatabaseName};
+use rusqlite::{Connection, DatabaseName, OpenFlags};
 use std::io::prelude::*;
 
 const PASSWORD_BUFFER_LIMIT: usize = 64;
@@ -95,6 +95,20 @@ pub fn query_password_for(conn: &Connection, login: &mut Login) -> Result<(), Da
     login.update_password(buffer);
 
     Ok(())
+}
+
+pub fn connect_to(path: PathBuf) -> Result<Connection, DatabaseError> {
+    let conn = Connection::open_with_flags(&path, OpenFlags::SQLITE_OPEN_READ_ONLY);
+
+    match conn {
+        Ok(c) => Ok(c),
+        Err(e) => {
+            return Err(DatabaseError::ConnectionError(
+                path.to_str().unwrap().to_string(),
+                e.to_string(),
+            ))
+        }
+    }
 }
 
 fn test_row_id(conn: &Connection, id: &i64) -> Result<(), ()> {

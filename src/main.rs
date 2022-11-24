@@ -15,7 +15,10 @@ fn main() {
 
     let profiles = match path::get_all_profiles() {
         Ok(i) => i,
-        Err(e) => panic!("An error occurred while getting profiles: {}", e),
+        Err(e) => {
+            eprintln!("An error occurred while getting profiles: {}", e);
+            exit(20)
+        }
     };
 
     for database_location in profiles {

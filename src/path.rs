@@ -35,3 +35,13 @@ pub fn get_all_profiles() -> Result<Vec<PathBuf>, PathError> {
 
     Ok(res)
 }
+
+pub fn get_local_state() -> Result<PathBuf, PathError> {
+    let local_state = get_home().join("Local State");
+
+    if !local_state.exists() {
+        return Err(PathError::LocalStateDoesNotExist(local_state));
+    }
+
+    Ok(local_state)
+}

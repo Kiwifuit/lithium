@@ -1,4 +1,4 @@
-use std::fmt::Display;
+use std::{fmt::Display, path::PathBuf};
 
 #[derive(Debug)]
 pub enum DatabaseError {
@@ -38,6 +38,7 @@ impl Display for DatabaseError {
 pub enum PathError {
     GlobError(String),
     SearchError(String),
+    LocalStateDoesNotExist(PathBuf),
 }
 
 impl Display for PathError {
@@ -50,6 +51,10 @@ impl Display for PathError {
                     format!("An error occurred while creating the globber: {}", err),
                 Self::SearchError(err) =>
                     format!("An error occurred while searching for profiles: {}", err),
+                Self::LocalStateDoesNotExist(path) => format!(
+                    "Local State file does not exist on {}",
+                    path.as_path().display()
+                ),
             }
         )
     }

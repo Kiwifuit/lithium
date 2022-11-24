@@ -3,6 +3,7 @@ use std::process::exit;
 mod db;
 mod err;
 mod path;
+mod crypt;
 
 fn main() {
     let encryption_key = match path::get_encryption_key() {

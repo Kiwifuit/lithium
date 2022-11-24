@@ -59,3 +59,36 @@ impl Display for PathError {
         )
     }
 }
+
+#[derive(Debug)]
+pub enum LocalStateError {
+    GetLocalStateError(PathError),
+    OpenError(String),
+    ReadError(String),
+    JsonReadError(usize, String),
+    JsonGetError(String),
+}
+
+impl Display for LocalStateError {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(
+            f,
+            "{}",
+            match self {
+                Self::GetLocalStateError(err) => format!(
+                    "{} (error occurred while getting the Local State file)",
+                    err
+                ),
+                Self::OpenError(err) =>
+                    format!("An error occurred while opening Local State: {}", err),
+                Self::ReadError(err) =>
+                    format!("An error occurred while reading Local State: {}", err),
+                Self::JsonReadError(at, err) => format!(
+                    "An error occurred while reading parsed Local State (at {}): {}",
+                    at, err
+                ),
+                Self::JsonGetError(what) => format!("A key does not exist: {:?}", what),
+            }
+        )
+    }
+}

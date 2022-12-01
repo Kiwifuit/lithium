@@ -117,3 +117,64 @@ fn test_row_id(conn: &Connection, id: &i64) -> Result<(), ()> {
         Err(_) => Err(()),
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    macro_rules! connect {
+        () => {
+            connect_to(PathBuf::from("data/Profile 1/Login Data"))
+        };
+    }
+
+    #[test]
+    fn connection_established() {
+        let conn = connect!();
+
+        assert!(
+            conn.is_ok(),
+            "Expected a connection to be established, got an error instead: {}",
+            conn.unwrap_err()
+        )
+    }
+
+    #[test]
+    fn can_query_usernames() {
+        let conn = connect!().unwrap();
+
+        let users = query_all_usernames(&conn);
+
+        assert!(
+            users.is_ok(),
+            "Expected a list of users, got an error instead: {}",
+            users.unwrap_err()
+        )
+    }
+
+    #[test]
+    fn can_query_passwords() {
+        let conn = connect!().unwrap();
+
+        let users = query_all_usernames(&conn);
+
+        assert!(
+            users.is_ok(),
+            "Expected a list of users, got an error instead: {}",
+            users.unwrap_err()
+        );
+
+        let users = users.unwrap();
+
+        for mut user in users {
+            let password = query_password_for(&conn, &mut user);
+
+            assert!(
+                password.is_ok(),
+                "Expected the password to for {:?} to be updated, got error instead: {}",
+                user.get_username(),
+                password.unwrap_err()
+            );
+        }
+    }
+}

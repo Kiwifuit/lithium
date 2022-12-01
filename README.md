@@ -2,6 +2,7 @@
 A program to snatch Chrome logins
 
 - [Lithium](#lithium)
+  - [Testing](#testing)
   - [Features](#features)
   - [Build Instructions](#build-instructions)
     - [Prerequisites](#prerequisites)
@@ -13,6 +14,15 @@ A program to snatch Chrome logins
 > **Note**: This can *only* ran on a Windows machine due
 > to an OS-Specific encryption method. Support for Linux
 > and Mac is appreciated but I won't be implementing that anytime soon
+
+## Testing
+If you want to make sure that Lithium works on your system, you can run `cargo test`. Though, you need some prerequisites:
+
+* On the project root should be an SQLite database on `data/Profile 1/Login Data`
+  * You can copy the `Login Data` from Chrome's home folder on `%LOCALAPPDATA%\Google\Chrome`, it should be inside a `Profile x` where `x` is a number
+  * **Not complying will get you some errors in `db.rs`** >:DDDDDD
+* `cargo`, `rustc`, and the entire toolchain, of course
+* A good internet connection to grab the dependencies
 
 ## Features
 **For now, these features are all dead, nothing will change if you add them or not when building**

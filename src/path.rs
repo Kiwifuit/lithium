@@ -88,3 +88,40 @@ pub fn get_encryption_key() -> Result<String, LocalStateError> {
         None => return Err(LocalStateError::JsonGetError(String::from("os_crypt"))),
     }
 }
+
+// This should only run on windows machines
+// BECAUSE:
+//  - cant test it on unix ;-;
+//  - paths aren't unix-compliant
+#[cfg(test)]
+#[cfg(target_os = "windows")]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn get_chrome_home() {
+        get_home()
+    }
+
+    #[test]
+    fn get_profile_databases() {
+        let dbs = get_all_profiles();
+
+        assert!(
+            dbs.is_ok(),
+            "Expected a list of profiles, got error: {}",
+            dbs.unwrap_err()
+        );
+    }
+
+    #[test]
+    fn encryption_key_gets() {
+        let key = get_encryption_key();
+
+        assert!(
+            key.is_ok(),
+            "Expected an encryption key, got error: {}",
+            key.unwrap_err()
+        );
+    }
+}
